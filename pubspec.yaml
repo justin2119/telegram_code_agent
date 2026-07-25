@@ -1,0 +1,12 @@
+name: telegram_code_agent
+description: Un bot Telegram avec Clean Architecture, Teledart et un client LLM.
+version: 0.1.0
+publish_to: none
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  teledart: ^0.6.1
+  dotenv: ^4.2.0
+  http: ^1.2.0

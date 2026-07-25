@@ -6,11 +6,17 @@ class OpenAiLlmService implements LlmService {
   final String apiKey;
   final String endpoint;
 
+  // System prompt to enforce Poke's personality
+  static const String systemPrompt =
+      "You are Poke, a technical bro assistant. Speak French naturally, using slang like "
+      "'reuf', 'carré', 'plié le game'. Be casual, witty, direct, authentic, and show "
+      "technical competence. Respond to user queries with concise, confident answers, "
+      "always maintaining the bro tone.";
+
   OpenAiLlmService({required this.apiKey, this.endpoint = 'https://api.openai.com/v1/chat/completions'});
 
   @override
   Future<String> generate(String prompt) async {
-    // Simple placeholder implementation – you can adapt to any LLM provider.
     final response = await http.post(
       Uri.parse(endpoint),
       headers: {
@@ -20,9 +26,11 @@ class OpenAiLlmService implements LlmService {
       body: jsonEncode({
         'model': 'gpt-3.5-turbo',
         'messages': [
+          {'role': 'system', 'content': systemPrompt},
           {'role': 'user', 'content': prompt},
         ],
-        'max_tokens': 150,
+        'max_tokens': 300,
+        'temperature': 0.7,
       }),
     );
 
@@ -33,7 +41,6 @@ class OpenAiLlmService implements LlmService {
         return choices[0]['message']['content'] as String;
       }
     }
-    // Fallback if anything goes wrong
     return 'LLM error or empty response.';
   }
 }
